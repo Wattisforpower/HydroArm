@@ -62,6 +62,12 @@ class HydroArmControl{
     void MoveUp_V(int distance);
     void MoveDown_V(int distance);
 
+    void MoveAngled(int Dist_Horizontal, int Dist_Vertical);
+
+
+    int Alpha2(int Z, int Y);
+    int Alpha1(int Z, int Y);
+
     // End Effector
 
     // EndEffector - Pickers

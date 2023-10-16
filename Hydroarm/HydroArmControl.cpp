@@ -91,6 +91,14 @@ void HydroArmControl::CurrentZYPos(){
   this->ZPos = this->ArmLength * sin(this->ServoPos.Shoulder + this->ServoPos.Elbow) + this->ArmLength * sin(this->ServoPos.Shoulder);
 }
 
+int HydroArmControl::Alpha1(int Z, int Y){
+  return atan((Z) / (Y)) - (atan((this->ArmLength * sin(this->Alpha2(int Z, int Y)) / (this->ArmLength + (this->ArmLength * cos(this->Alpha2(int Z, int Y))))));
+}
+
+int HydroArmControl::Alpha2(int Z, int Y){
+  return acos(((Z * Z) + (Y * Y) - (this->ArmLength * this->ArmLength) - (this->ArmLength * this->ArmLength)) / 2 * (this->ArmLength * this->ArmLength));
+}
+
 void HydroArmControl::MoveForwards_H(int distance_mm){
   this->CurrentZYPos();
 
@@ -98,8 +106,11 @@ void HydroArmControl::MoveForwards_H(int distance_mm){
   int TargetPositionY = this->YPos + distance_mm;
 
   // work out Shoulder Angle
-  this->ServoPos.Elbow = acos(((this->ZPos * this->ZPos) + (TargetPositionY * TargetPositionY) - (this->ArmLength * this->ArmLength) - (this->ArmLength * this->ArmLength)) / 2 * (this->ArmLength * this->ArmLength));
-  this->ServoPos.Shoulder = atan((this->ZPos) / (TargetPositionY)) - (atan((this->ArmLength * sin(this->ServoPos.Elbow)) / (this->ArmLength + (this->ArmLength * cos(this->ServoPos.Elbow)))));
+  //this->ServoPos.Elbow = acos(((this->ZPos * this->ZPos) + (TargetPositionY * TargetPositionY) - (this->ArmLength * this->ArmLength) - (this->ArmLength * this->ArmLength)) / 2 * (this->ArmLength * this->ArmLength));
+  //this->ServoPos.Shoulder = atan((this->ZPos) / (TargetPositionY)) - (atan((this->ArmLength * sin(this->ServoPos.Elbow)) / (this->ArmLength + (this->ArmLength * cos(this->ServoPos.Elbow)))));
+
+  this->ServoPos.Elbow = this->Alpha1(this->ZPos, TargetPositionY);
+  this->ServoPos.Shoulder = this->Alpha2(this->ZPos, TargetPositionY);
 
   // Position the arm accordingly
 
@@ -107,6 +118,60 @@ void HydroArmControl::MoveForwards_H(int distance_mm){
   this->MoveSingleServo(3, this->ServoPos.Elbow);
 
   delay(15); // Wait for the servos to move
+}
+
+void HydroArmControl::MoveBackwards_H(int distance){
+  this->CurrentZYPos();
+
+  int TargetPositionY = this->YPos - distance;
+
+  //this->ServoPos.Elbow = acos(((this->ZPos * this->ZPos) + (TargetPositionY * TargetPositionY) - (this->ArmLength * this->ArmLength) - (this->ArmLength * this->ArmLength)) / 2 * (this->ArmLength * this->ArmLength));
+  //this->ServoPos.Shoulder = atan((this->ZPos) / (TargetPositionY)) - (atan((this->ArmLength * sin(this->ServoPos.Elbow)) / (this->ArmLength + (this->ArmLength * cos(this->ServoPos.Elbow)))));
+
+  this->ServoPos.Elbow = this->Alpha1(this->ZPos, TargetPositionY);
+  this->ServoPos.Shoulder = this->Alpha2(this->ZPos, TargetPositionY);
+
+  // Position the arm accordingly
+
+  this->MoveSingleServo(2, this->ServoPos.Shoulder);
+  this->MoveSingleServo(3, this->ServoPos.Elbow);
+}
+
+void HydroArmControl::MoveUp_V(int distance){
+  this->CurrentZYPos();
+
+  int TargetPositionZ = this->ZPos + distance;
+
+  this->ServoPos.Elbow = this->Alpha1(TargetPositionZ, this->YPos);
+  this->ServoPos.Shoulder = this->Alpha2(TargetPositionZ, this->YPos);
+
+  this->MoveSingleServo(2, this->ServoPos.Shoulder);
+  this->MoveSingleServo(3, this->ServoPos.Elbow);
+}
+
+void HydroArmControl::MoveDown_V(int distance){
+  this->CurrentZYPos();
+
+  int TargetPositionZ = this->ZPos - distance;
+
+  this->ServoPos.Elbow = this->Alpha1(TargetPositionZ, this->YPos);
+  this->ServoPos.Shoulder = this->Alpha2(TargetPositionZ, this->YPos);
+
+  this->MoveSingleServo(2, this->ServoPos.Shoulder);
+  this->MoveSingleServo(3, this->ServoPos.Elbow);
+}
+
+void HydroArmControl::MoveAngled(int Dist_Horizontal, int Dist_Vertical){
+  this->CurrentZYPos();
+
+  int TargetY = this->YPos + Dist_Horizontal;
+  int TargetZ = this->ZPos + Dist_Vertical;
+
+  this->ServoPos.Elbow = this->Alpha1(TargetZ, TargetY);
+  this->ServoPos.Shoulder = this->Alpha2(TargetZ, TargetY);
+
+  this->MoveSingleServo(2, this->ServoPos.Shoulder);
+  this->MoveSingleServo(3, this->ServoPos.Elbow);
 }
 
 // EndEffector Code
