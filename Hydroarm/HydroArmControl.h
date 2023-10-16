@@ -22,6 +22,7 @@ class HydroArmControl{
     Servo Elbow_Servo;
     Servo Wrist_Servo;
     Servo Wrist_Rot_Servo;
+    Servo EndEffector_Picker;
 
     // Arm Variables
     struct {
@@ -55,22 +56,36 @@ class HydroArmControl{
     void MoveAllServos(int ShoulderRotPosition, int ShoulderPosition, int ElbowPosition, int WristPosition, int WristRotPosition);
     void MoveSingleServo(int Servo, int Position);
 
-    void CurrentZYPos();
 
+    // Linear Movements
+    void CurrentZYPos();
     void MoveForwards_H(int distance);
     void MoveBackwards_H(int distance);
     void MoveUp_V(int distance);
     void MoveDown_V(int distance);
-
+    void LiftArm();
+    void MoveToPosition(int Z, int Y);
     void MoveAngled(int Dist_Horizontal, int Dist_Vertical);
 
 
+    // Rotational Movements
+    void RotateBase(int angle);
+    void RotateWrist(int angle);
+
+    // Inverse Kinematics
+    void FindXYfromAngles();
+
+    // Forward Kinematics
     int Alpha2(int Z, int Y);
     int Alpha1(int Z, int Y);
 
     // End Effector
+    void EndEffectorReset();
+    void LiftEndEffector(int angle);
+
 
     // EndEffector - Pickers
+    void Init_Picker(int Pin, int offset);
     void OpenPicker();
     void ClosePicker();    
     void PickFruit();

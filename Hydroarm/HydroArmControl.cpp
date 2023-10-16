@@ -174,5 +174,50 @@ void HydroArmControl::MoveAngled(int Dist_Horizontal, int Dist_Vertical){
   this->MoveSingleServo(3, this->ServoPos.Elbow);
 }
 
-// EndEffector Code
+void HydroArmControl::MoveToPosition(int Z, int Y){
+  this->ServoPos.Elbow = this->Alpha1(Z, Y);
+  this->ServoPos.Shoulder = this->Alpha2(Z, Y);
 
+  this->MoveSingleServo(2, this->ServoPos.Shoulder);
+  this->MoveSingleServo(3, this->ServoPos.Elbow);
+}
+
+void HydroArmControl::LiftArm(){
+  this->MoveSingleServo(3, this->ServoPos.Elbow);
+}
+
+void HydroArmControl::RotateBase(int angle){
+  this->MoveSingleServo(1, angle);
+}
+
+void HydroArmControl::RotateWrist(int angle){
+  this->MoveSingleServo(5, angle);
+}
+
+void HydroArmControl::FindXYfromAngles(){
+  this->YPos = this->ArmLength * cos(this->ServoPos.Shoulder + this->ServoPos.Elbow) + this->ArmLength * cos(this->ServoPos.Shoulder);
+  this->ZPos = this->ArmLength * sin(this->ServoPos.Shoulder + this->ServoPos.Elbow) + this->ArmLength * sin(this->ServoPos.Shoulder);
+}
+
+// EndEffector Code
+void HydroArmControl::EndEffectorReset(){
+  this->MoveSingleServo(4, 0);
+  this->MoveSingleServo(5, 0);
+}
+
+void HydroArmControl::LiftEndEffector(int angle){
+  this->MoveSingleServo(5, angle)
+}
+
+void HydroArmControl::Init_Picker(int Pin, int offset){
+  this->EndEffector_Picker.attach(Pin);
+  this->EndEffector_Picker.write(0 + offset);
+}
+
+void HydroArmControl::OpenPicker(){
+  this->EndEffector_Picker.write(90);
+}
+
+void HydroArmControl::ClosePicker(){
+  // Slowly close the gripper until tacktile feeback
+}
