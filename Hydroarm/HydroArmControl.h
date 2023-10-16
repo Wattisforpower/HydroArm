@@ -2,6 +2,8 @@
 #define HydroArmControl_H
 
 #include <Arduino.h>
+#include "WString.h"
+#include <Servo.h>
 
 
 /*
@@ -15,6 +17,12 @@
 
 class HydroArmControl{
   private:
+    Servo Shoulder_Rot_Servo;
+    Servo Shoulder_Servo;
+    Servo Elbow_Servo;
+    Servo Wrist_Servo;
+    Servo Wrist_Rot_Servo;
+
     // Arm Variables
     struct {
       int Shoulder_Rot = 0;
@@ -34,11 +42,10 @@ class HydroArmControl{
     int ZPos = 0;
     int YPos = 0;
 
-    static short ArmLength = 150; //15cm in mm
+    static const short ArmLength = 150; //15cm in mm
 
     // End Effector Variables
     bool EndEffectorActive = false;
-    string EndEffectorSelection = "";
 
   public:
     // Main Arm System
@@ -56,7 +63,6 @@ class HydroArmControl{
     void MoveDown_V(int distance);
 
     // End Effector
-    void ActivateEndEffector(bool Active, string Selection);
 
     // EndEffector - Pickers
     void OpenPicker();

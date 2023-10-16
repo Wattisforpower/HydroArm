@@ -1,22 +1,16 @@
 #include "HydroArmControl.h"
 
-#include <Servo.h>
 
-Servo Shoulder_Rot_Servo;
-Servo Shoulder_Servo;
-Servo Elbow_Servo;
-Servo Wrist_Servo;
-Servo Wrist_Rot_Servo;
 
 HydroArmControl::HydroArmControl(int ShoulderRotPin, int ShoulderPin, int ElbowPin, int WristPin, int WristRotPin){
-  Shoulder_Rot_Servo.attach(ShoulderRotPin);
-  Shoulder_Servo.attach(ShoulderPin);
-  Elbow_Servo.attach(ElbowPin);
-  Wrist_Servo.attach(WristPin);
-  Wrist_Rot_Servo.attach(WristRotPin);
+  this->Shoulder_Rot_Servo.attach(ShoulderRotPin);
+  this->Shoulder_Servo.attach(ShoulderPin);
+  this->Elbow_Servo.attach(ElbowPin);
+  this->Wrist_Servo.attach(WristPin);
+  this->Wrist_Rot_Servo.attach(WristRotPin);
 }
 
-HydroArmControl::SetOffsets(int ShoulderRotOffset, int ShoulderOffset, int ElbowOffset, int WristOffset, int WristRotOffset){
+void HydroArmControl::SetOffsets(int ShoulderRotOffset, int ShoulderOffset, int ElbowOffset, int WristOffset, int WristRotOffset){
   this->Offsets.Shoulder_Rot = ShoulderRotOffset;
   this->Offsets.Shoulder = ShoulderOffset;
   this->Offsets.Elbow = ElbowOffset;
@@ -24,12 +18,12 @@ HydroArmControl::SetOffsets(int ShoulderRotOffset, int ShoulderOffset, int Elbow
   this->Offsets.Wrist_Rot = WristRotOffset;
 }
 
-HydroArmControl::SetToZero(){
-  Shoulder_Rot_Servo.write(0 + this->Offsets.Shoulder_Rot);
-  Shoulder_Servo.write(0 + this->Offsets.Shoulder);
-  Elbow_Servo.write(0 + this->Offsets.Elbow);
-  Wrist_Servo.write(0 + this->Offsets.Wrist);
-  Wrist_Rot_Servo.write(0 + this->Offsets.Wrist_Rot);
+void HydroArmControl::SetToZero(){
+  this->Shoulder_Rot_Servo.write(0 + this->Offsets.Shoulder_Rot);
+  this->Shoulder_Servo.write(0 + this->Offsets.Shoulder);
+  this->Elbow_Servo.write(0 + this->Offsets.Elbow);
+  this->Wrist_Servo.write(0 + this->Offsets.Wrist);
+  this->Wrist_Rot_Servo.write(0 + this->Offsets.Wrist_Rot);
 
   this->ServoPos.Shoulder_Rot = 0;
   this->ServoPos.Shoulder = 0;
@@ -38,28 +32,23 @@ HydroArmControl::SetToZero(){
   this->ServoPos.Wrist_Rot = 0;
 }
 
-HydroArmControl::MoveAllServos(int ShoulderRotPosition, int ShoulderPosition, int ElbowPosition, int WristPosition, int WristRotPosition){
-  
-  // Check all are valid movements
-  if ((0 < ShoulderRotPosition < 180) && (0 < ShoulderPosition < 180) && (0 < ElbowPosition < 180) && (0 < WristPosition< 180) && (0 < WristRotPosition < 180)){
-    // Run Code
-    Shoulder_Rot_Servo.write(ShoulderRotPosition);
-    Shoulder_Servo.write(ShoulderPosition);
-    Elbow_Servo.write(ElbowPosition);
-    Wrist_Servo.write(WristPosition);
-    Wrist_Rot_Servo.write(WristRotPosition);
+void HydroArmControl::MoveAllServos(int ShoulderRotPosition, int ShoulderPosition, int ElbowPosition, int WristPosition, int WristRotPosition){
 
-    this->ServoPos.Shoulder_Rot = ShoulderRotPosition;
-    this->ServoPos.Shoulder = ShoulderPosition;
-    this->ServoPos.Elbow = ElbowPosition;
-    this->ServoPos.Wrist = WristPosition;
-    this->ServoPos.Wrist_Rot = WristRotPosition;
+  // Run Code
+  this->Shoulder_Rot_Servo.write(ShoulderRotPosition);
+  this->Shoulder_Servo.write(ShoulderPosition);
+  this->Elbow_Servo.write(ElbowPosition);
+  this->Wrist_Servo.write(WristPosition);
+  this->Wrist_Rot_Servo.write(WristRotPosition);
 
-    delay(15); // wait for servos to move
-  }
+  this->ServoPos.Shoulder_Rot = ShoulderRotPosition;
+  this->ServoPos.Shoulder = ShoulderPosition;
+  this->ServoPos.Elbow = ElbowPosition;
+  this->ServoPos.Wrist = WristPosition;
+  this->ServoPos.Wrist_Rot = WristRotPosition;
 }
 
-HydroArmControl::MoveSingleServo(int Servo, int Position){
+void HydroArmControl::MoveSingleServo(int Servo, int Position){
   /*
   * Servo Numbers:
   * 1 - Shoulder Rotation
@@ -70,52 +59,39 @@ HydroArmControl::MoveSingleServo(int Servo, int Position){
   */
   switch (Servo){
     case 1:
-      if (0 < Position < 180){
-        Shoulder_Rot_Servo.write(Position);
+      this->Shoulder_Rot_Servo.write(Position);
+      this->ServoPos.Shoulder_Rot = Position;
 
-        this->ServoPos.Shoulder_Rot = ShoulderRotPosition;
-      }
       break;
     case 2:
-      if (0 < Position < 180){
-        Shoulder_Servo.write(Position);
-
-        this->ServoPos.Shoulder = ShoulderPosition;
-
-      }
+      this->Shoulder_Servo.write(Position);
+      this->ServoPos.Shoulder = Position;
       break;
     case 3:
-      if (0 < Position < 180){
-        Elbow_Servo.write(Position);
-        this->ServoPos.Elbow = ElbowPosition;
-      }
+      this->Elbow_Servo.write(Position);
+      this->ServoPos.Elbow = Position;
+
       break;
     case 4:
-      if (0 < Position < 180){
-        Wrist_Servo.write(Position);
-        
-        this->ServoPos.Wrist = WristPosition;
-    
-      }
+      this->Wrist_Servo.write(Position); 
+      this->ServoPos.Wrist = Position;
       break;
     case 5:
-      if (0 < Position < 180){
-        Wrist_Rot_Servo.write(Position);
-        this->ServoPos.Wrist_Rot = WristRotPosition;
-      }
+      this->Wrist_Rot_Servo.write(Position);
+      this->ServoPos.Wrist_Rot = Position;
       break;
     default:
       break;
   }
 }
 
-HydroArmControl::CurrentZYPos(){
+void HydroArmControl::CurrentZYPos(){
   // Shoulder, Elbow
   this->YPos = this->ArmLength * cos(this->ServoPos.Shoulder + this->ServoPos.Elbow) + this->ArmLength * cos(this->ServoPos.Shoulder);
   this->ZPos = this->ArmLength * sin(this->ServoPos.Shoulder + this->ServoPos.Elbow) + this->ArmLength * sin(this->ServoPos.Shoulder);
 }
 
-HydroArmControl::MoveForwards_H(int distance_mm){
+void HydroArmControl::MoveForwards_H(int distance_mm){
   this->CurrentZYPos();
 
 
@@ -125,14 +101,13 @@ HydroArmControl::MoveForwards_H(int distance_mm){
   this->ServoPos.Elbow = acos(((this->ZPos * this->ZPos) + (TargetPositionY * TargetPositionY) - (this->ArmLength * this->ArmLength) - (this->ArmLength * this->ArmLength)) / 2 * (this->ArmLength * this->ArmLength));
   this->ServoPos.Shoulder = atan((this->ZPos) / (TargetPositionY)) - (atan((this->ArmLength * sin(this->ServoPos.Elbow)) / (this->ArmLength + (this->ArmLength * cos(this->ServoPos.Elbow)))));
 
+  // Position the arm accordingly
 
+  this->MoveSingleServo(2, this->ServoPos.Shoulder);
+  this->MoveSingleServo(3, this->ServoPos.Elbow);
+
+  delay(15); // Wait for the servos to move
 }
 
 // EndEffector Code
-
-HydroArmControl::ActivateEndEffector(bool Active, string Selection){
-  this->EndEffectorActive = Active;
-  this->EndEffectorSelection = Selection;
-}
-
 
