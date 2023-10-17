@@ -92,7 +92,7 @@ void HydroArmControl::CurrentZYPos(){
 }
 
 int HydroArmControl::Alpha1(int Z, int Y){
-  return atan((Z) / (Y)) - (atan((this->ArmLength * sin(this->Alpha2(int Z, int Y)) / (this->ArmLength + (this->ArmLength * cos(this->Alpha2(int Z, int Y))))));
+  return atan((Z) / (Y)) - (atan((this->ArmLength * sin(this->Alpha2(Z, Y)) / (this->ArmLength + (this->ArmLength * cos(this->Alpha2(Z, Y)))))));
 }
 
 int HydroArmControl::Alpha2(int Z, int Y){
@@ -206,7 +206,7 @@ void HydroArmControl::EndEffectorReset(){
 }
 
 void HydroArmControl::LiftEndEffector(int angle){
-  this->MoveSingleServo(5, angle)
+  this->MoveSingleServo(5, angle);
 }
 
 void HydroArmControl::Init_Picker(int Pin, int offset){

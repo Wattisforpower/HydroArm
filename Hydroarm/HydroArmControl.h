@@ -32,6 +32,7 @@ class HydroArmControl{
       int Wrist = 0;
       int Wrist_Rot = 0;
     } ServoPos;
+    
     struct {
       int Shoulder_Rot = 0;
       int Shoulder = 0;
