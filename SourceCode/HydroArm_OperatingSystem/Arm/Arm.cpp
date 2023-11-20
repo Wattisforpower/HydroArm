@@ -5,8 +5,8 @@ Arm::Arm(PinName _Shoulder, PinName _Elbow, PinName _Wrist_Rot, PinName _Wrist, 
     // Home the Arm
     // Set all values to Zero
 
-    Shoulder.calibrate(0.0005, 180);
-    Elbow.calibrate(0.0005, 180);
+    Shoulder.calibrate(0.002, 180); // 0.002 for SG90
+    Elbow.calibrate(0.002, 180); // 0.002 for SG90
 }
 
 void Arm::TargetIntegrate(float x, float y){
@@ -14,7 +14,10 @@ void Arm::TargetIntegrate(float x, float y){
     Target.y = y;
 }
 
-void Arm::CalculateInverseKinematics(){
+void Arm::CalculateInverseKinematics(float x, float y){
+    // Take in the Targets
+    TargetIntegrate(x, y);
+
     // Calculate Q2 (Positive)
     float Numerator = ((Target.x)*(Target.x)) + ((Target.y)*(Target.y)) - ((Arm_Lengths.A1)*(Arm_Lengths.A1)) - ((Arm_Lengths.A2)*(Arm_Lengths.A2));
     float Denominator = 2 * Arm_Lengths.A1 * Arm_Lengths.A2;

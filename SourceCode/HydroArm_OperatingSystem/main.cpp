@@ -13,7 +13,7 @@ int main()
 {
 
     while (true) {
-        RASH.ManualMove(0, 0);
+        //RASH.ManualMove(0, 0);
 
         float q1 = RASH.returnQ1();
         float q2 = RASH.returnQ2();

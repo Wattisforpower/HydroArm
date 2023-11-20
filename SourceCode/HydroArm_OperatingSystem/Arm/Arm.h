@@ -42,8 +42,8 @@ class Arm{
 
     public:
         Arm(PinName _Shoulder, PinName _Elbow, PinName _Wrist_Rot, PinName _Wrist, PinName _EndEffector);
-        void TargetIntegrate(float x, float y); // must be done before calculate IK
-        void CalculateInverseKinematics();
+        void TargetIntegrate(float x, float y);
+        void CalculateInverseKinematics(float x, float y);
         float returnQ1();
         float returnQ2();
 
