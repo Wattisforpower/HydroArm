@@ -1,7 +1,7 @@
 % Arm Contraints
 ArmLength = [0.225, 0.255];
 Origin = [0, 0];
-PointNo = 1000;
+PointNo = 10000;
 
 % Data Generation
 Theta = UniformData(PointNo, 0, pi);
