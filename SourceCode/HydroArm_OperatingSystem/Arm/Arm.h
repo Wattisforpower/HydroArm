@@ -51,6 +51,9 @@ class Arm{
         void MoveArmToPos();
         void ManualMove(float Q1, float Q2);
         void Home();
+
+        // Demonstrations
+        void Demonstration_One();
         
 };
 

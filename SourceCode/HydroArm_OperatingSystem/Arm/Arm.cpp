@@ -67,3 +67,45 @@ void Arm::ManualMove(float Q1, float Q2){
     Angles.q1 = Q1;
     Angles.q2 = Q2;
 }
+
+void Arm::Demonstration_One(){
+    CalculateInverseKinematics(0.31691, 0.149744);
+    MoveArmToPos();
+
+    float q1 = returnQ1();
+    float q2 = returnQ2();
+
+    printf("Angle 1: %.3f | Angle 2: %.3f \n", q1, q2);
+
+    wait_us(2000000);
+
+    CalculateInverseKinematics(0.116017, 0.147761);
+    MoveArmToPos();
+
+    q1 = returnQ1();    
+    q2 = returnQ2();
+
+    printf("Angle 1: %.3f | Angle 2: %.3f \n", q1, q2);
+
+    wait_us(2000000);
+
+    CalculateInverseKinematics(0.117893, 0.278706);
+    MoveArmToPos();
+
+    q1 = returnQ1();    
+    q2 = returnQ2();
+
+    printf("Angle 1: %.3f | Angle 2: %.3f \n", q1, q2);
+
+    wait_us(2000000);
+
+    CalculateInverseKinematics(0.316273, 0.282034);
+    MoveArmToPos();
+
+
+    q1 = returnQ1();    
+    q2 = returnQ2();
+
+    printf("Angle 1: %.3f | Angle 2: %.3f \n", q1, q2);
+    wait_us(2000000);
+}
