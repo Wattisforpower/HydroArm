@@ -1,7 +1,7 @@
 #include "Arm.h"
 #include <cmath>
 
-Arm::Arm(PinName _Shoulder, PinName _Elbow, PinName _Wrist_Rot, PinName _Wrist, PinName _EndEffector): Shoulder(_Shoulder), Elbow(_Elbow), Wrist_Rot(_Wrist_Rot), Wrist(_Wrist), EndEffector(_EndEffector){
+Arm::Arm(PinName _Shoulder, PinName _Elbow, PinName _Wrist, PinName _EndEffector): Shoulder(_Shoulder), Elbow(_Elbow), Wrist(_Wrist), EndEffector(_EndEffector){
     // Home the Arm
     // Set all values to Zero
 
@@ -9,12 +9,12 @@ Arm::Arm(PinName _Shoulder, PinName _Elbow, PinName _Wrist_Rot, PinName _Wrist, 
     Elbow.calibrate(0.002, 180); // 0.002 for SG90
 }
 
-void Arm::TargetIntegrate(float x, float y){
+void Arm::TargetIntegrate(float y, float x){
     Target.x = x;
     Target.y = y;
 }
 
-void Arm::CalculateInverseKinematics(float x, float y){
+void Arm::CalculateInverseKinematics(float y, float x){
     // Take in the Targets
     TargetIntegrate(x, y);
 
@@ -22,11 +22,11 @@ void Arm::CalculateInverseKinematics(float x, float y){
     float Numerator = ((Target.x)*(Target.x)) + ((Target.y)*(Target.y)) - ((Arm_Lengths.A1)*(Arm_Lengths.A1)) - ((Arm_Lengths.A2)*(Arm_Lengths.A2));
     float Denominator = 2 * Arm_Lengths.A1 * Arm_Lengths.A2;
     float Q2 = acos(Numerator / Denominator);
-    Q2 = Q2 * (180 / PI);
 
     // Calculate Q1 (Positive)
     float Q1 = atan2(Target.y, Target.x) - atan2((Arm_Lengths.A2 * sin(Q2)), (Arm_Lengths.A1 + Arm_Lengths.A2 * cos(Q2)));
     Q1 = Q1 * (180 / PI);
+    Q2 = Q2 * (180 / PI);
 
     // Alternative solutions to be added
     // -Q2
@@ -68,14 +68,23 @@ void Arm::ManualMove(float Q1, float Q2){
     Angles.q2 = Q2;
 }
 
+void Arm::CalcOffsets(){
+    Offsets.q1 = Shoulder.read();
+    Offsets.q2 = Shoulder.read();
+}
+
 void Arm::Demonstration_One(){
+    //CalcOffsets();
+
+    //wait_us(2000000);
+
     CalculateInverseKinematics(0.31691, 0.149744);
     MoveArmToPos();
 
     float q1 = returnQ1();
     float q2 = returnQ2();
 
-    printf("Angle 1: %.3f | Angle 2: %.3f \n", q1, q2);
+    printf("P1: Angle 1: %.3f | Angle 2: %.3f \n", q1, q2);
 
     wait_us(2000000);
 
@@ -85,7 +94,7 @@ void Arm::Demonstration_One(){
     q1 = returnQ1();    
     q2 = returnQ2();
 
-    printf("Angle 1: %.3f | Angle 2: %.3f \n", q1, q2);
+    printf("P2: Angle 1: %.3f | Angle 2: %.3f \n", q1, q2);
 
     wait_us(2000000);
 
@@ -95,7 +104,7 @@ void Arm::Demonstration_One(){
     q1 = returnQ1();    
     q2 = returnQ2();
 
-    printf("Angle 1: %.3f | Angle 2: %.3f \n", q1, q2);
+    printf("P3: Angle 1: %.3f | Angle 2: %.3f \n", q1, q2);
 
     wait_us(2000000);
 
@@ -106,6 +115,6 @@ void Arm::Demonstration_One(){
     q1 = returnQ1();    
     q2 = returnQ2();
 
-    printf("Angle 1: %.3f | Angle 2: %.3f \n", q1, q2);
+    printf("P4: Angle 1: %.3f | Angle 2: %.3f \n", q1, q2);
     wait_us(2000000);
 }

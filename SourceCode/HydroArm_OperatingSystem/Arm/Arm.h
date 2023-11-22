@@ -34,16 +34,15 @@ class Arm{
         
         Servo Shoulder;
         Servo Elbow;
-        Servo Wrist_Rot;
         Servo Wrist;
         Servo EndEffector;
 
         float PI = 3.14159;
 
     public:
-        Arm(PinName _Shoulder, PinName _Elbow, PinName _Wrist_Rot, PinName _Wrist, PinName _EndEffector);
-        void TargetIntegrate(float x, float y);
-        void CalculateInverseKinematics(float x, float y);
+        Arm(PinName _Shoulder, PinName _Elbow, PinName _Wrist, PinName _EndEffector);
+        void TargetIntegrate(float y, float x);
+        void CalculateInverseKinematics(float y, float x);
         float returnQ1();
         float returnQ2();
 
@@ -51,6 +50,7 @@ class Arm{
         void MoveArmToPos();
         void ManualMove(float Q1, float Q2);
         void Home();
+        void CalcOffsets();
 
         // Demonstrations
         void Demonstration_One();
