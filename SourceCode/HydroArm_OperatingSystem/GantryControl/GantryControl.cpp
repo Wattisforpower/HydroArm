@@ -57,20 +57,33 @@ void GantryControl::XMove(float Distance, bool direction){
 
     // Direction Control
     if (direction){
-        dirPin = 0; // clockwise
+        dirPin = 1; // clockwise
     }
     else{
-        dirPin = 1; // anti-clockwise
+        dirPin = 0; // anti-clockwise
     }
 
     // Run system
     for (int i = 0; i < Steps; i++){
         stepPin = 1;
-        wait_us(500000);
+        wait_us(2000);
         stepPin = 0;
-        wait_us(500000);
+        wait_us(2000);
     }
 }
+
+void GantryControl::Test(){
+    dirPin = 1;
+    
+    for (int i = 0; i < 200; i++){
+        stepPin = 1;
+        wait_us(2000);
+        stepPin = 0;
+        wait_us(2000);
+    }
+}
+
+
 
 void GantryControl::AutomaticControl(float IntervalDist_mm){
     // Home the systems
