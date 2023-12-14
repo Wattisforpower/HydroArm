@@ -5,9 +5,9 @@ void Controller::ErrorCalc(float current, float desired){
     error = current - desired;
 }
 
-void Controller::giveError(float error){
+void Controller::giveError(float Error){
     previouserror = error;
-    error = error;
+    error = Error;
 }
 
 void Controller::Timeperiod(){

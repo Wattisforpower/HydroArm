@@ -8,14 +8,15 @@ class GantryControl{
         float StepsPermm = 3.98; // needs to be changed
         DigitalOut stepPin;
         DigitalOut dirPin;
-        DigitalOut Trigger;
-        DigitalIn Limit_X;
         DigitalIn Move;
 
         float X_Max = 0.0;
         float position_mm;
         float Maximum_Positon;
     public:
+        DigitalOut Trigger;
+        DigitalIn Limit_X;
+
         GantryControl(PinName _Step, PinName _Dir, PinName _Limit, PinName _Trigger, PinName _Move,  float Max_Dist);
         void Assign_StepsPermm(float StepsPermmVal);
         float Converttosteps(float Distance_m);

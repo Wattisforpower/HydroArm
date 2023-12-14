@@ -58,6 +58,9 @@ void Arm::MoveArmToPos(){
 
     Shoulder.position(Angles.q1);
     Elbow.position(Angles.q2);
+
+    ShoulderRot.position(Shoulder.read());
+    Wrist.position(Angles.q1);
 }
 
 void Arm::ManualMove(float Q1, float Q2){
@@ -132,7 +135,7 @@ void Arm::MoveWithPID(float TargetQ1, float TargetQ2){
     PIDQ1.ErrorCalc(currentQ1, TargetQ1);
     PIDQ2.ErrorCalc(currentQ2, TargetQ2);
 
-    while ((currentQ1 != TargetQ1) && (currentQ2 != TargetQ2)){
+    while ((TargetQ1 - currentQ1 > 0.1) && (TargetQ2 - currentQ2 > 0.1)){
         // run the PD controller
         float Q1Movement = PIDQ1.PDContoller();
         float Q2Movement = PIDQ2.PDContoller();
@@ -145,10 +148,10 @@ void Arm::MoveWithPID(float TargetQ1, float TargetQ2){
         ManualMove(Q1New, Q2New);
 
         // Temporary code - Print positions
-        printf("Q1 angle: %0.3f | Q2 angle: %0.3f", Q1New, Q2New);
+        printf("Q1 angle: %0.3f | Q2 angle: %0.3f  \n", Q1New, Q2New);
         
         // Wait for movement to occur
-        wait_us(25000); //25ms
+        wait_us(1000000); //1s
 
         // check positions and save updated
         currentQ1 = Shoulder.read();
@@ -166,7 +169,7 @@ void Arm::MoveWithPID(float TargetQ1, float TargetQ2){
 void Arm::Demonstration_Two(){
     // Move to 1st Position
     CalculateInverseKinematics(0.31691, 0.149744);
-
+    printf("Target Positions: %0.3f, %0.3f", Angles.q1, Angles.q2);
     MoveWithPID(Angles.q1, Angles.q2);
 
     // Move to 2nd Position
