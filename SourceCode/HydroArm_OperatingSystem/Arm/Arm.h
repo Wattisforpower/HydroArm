@@ -4,6 +4,7 @@
 // https://robotacademy.net.au/lesson/inverse-kinematics-for-a-2-joint-robot-arm-using-geometry/
 #include "mbed.h"
 #include "Servo.h"
+#include "Controller.h"
 
 class Arm{
     private:
@@ -32,15 +33,19 @@ class Arm{
             float A2 = 0.255;
         }Arm_Lengths;
         
+        Servo ShoulderRot;
         Servo Shoulder;
         Servo Elbow;
         Servo Wrist;
         Servo EndEffector;
 
+        Controller PIDQ1;
+        Controller PIDQ2;
+
         float PI = 3.14159;
 
     public:
-        Arm(PinName _Shoulder, PinName _Elbow, PinName _Wrist, PinName _EndEffector);
+        Arm(PinName _ShoulderRot, PinName _Shoulder, PinName _Elbow, PinName _Wrist, PinName _EndEffector);
         void TargetIntegrate(float y, float x);
         void CalculateInverseKinematics(float y, float x);
         float returnQ1();
@@ -51,9 +56,15 @@ class Arm{
         void ManualMove(float Q1, float Q2);
         void Home();
         void CalcOffsets();
+        void MoveArmUp();
+        void MoveArmDown();
 
         // Demonstrations
         void Demonstration_One();
+        void Demonstration_Two();
+
+        // PID Controlled Movement
+        void MoveWithPID(float TargetQ1, float TargetQ2);
         
 };
 

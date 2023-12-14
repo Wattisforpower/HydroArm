@@ -10,11 +10,11 @@ print(interpreter.get_signature_list())
 
 classify_lite = interpreter.get_signature_runner('serving_default')
 
-os.system("fswebcam -r 640x480 -v -S 10 --set brightness=50% --no-banner ~/output/plant.png")
+#os.system("fswebcam -r 640x480 -v -S 10 --set brightness=50% --no-banner ~/output/plant.png")
 
-#Input = 'TestImages/ripe.png'
+Input = 'TestImages/ripe.png'
 
-Input = 'output/plant.png'
+#Input = 'output/plant.png'
 
 img = tf.keras.utils.load_img(
     Input, target_size=(200, 200)

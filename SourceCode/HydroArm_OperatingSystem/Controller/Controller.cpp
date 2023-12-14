@@ -1,23 +1,23 @@
 #include "Controller.h"
 
 void Controller::ErrorCalc(float current, float desired){
-    this->previouserror = this->error;
-    this->error = current - desired;
+    previouserror = error;
+    error = current - desired;
 }
 
 void Controller::giveError(float error){
-    this->previouserror = this->error;
-    this->error = error;
+    previouserror = error;
+    error = error;
 }
 
 void Controller::Timeperiod(){
     float currenttime = us_ticker_read();
-    this->Time_Period = currenttime - this->PreviousTime;
-    this->PreviousTime = currenttime;
+    Time_Period = currenttime - PreviousTime;
+    PreviousTime = currenttime;
 }
 
 float Controller::PDContoller(){
-    this->Timeperiod();
+    Timeperiod();
 
-    return -(this->Kp * this->error) - (this->Kd * (this->error - this->previouserror) / this->Time_Period);
+    return -(Kp * error) - (Kd * (error - previouserror) / Time_Period);
 }
