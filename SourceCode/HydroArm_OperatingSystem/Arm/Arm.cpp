@@ -27,7 +27,7 @@ void Arm::CalculateInverseKinematics(float y, float x){
     float Q2 = acos(Numerator / Denominator);
 
     // Calculate Q1 (Positive)
-    float Q1 = atan2(Target.y, Target.x) - atan2((Arm_Lengths.A2 * sin(Q2)), (Arm_Lengths.A1 + Arm_Lengths.A2 * cos(Q2)));
+    float Q1 = atan2(Target.y, Target.x) - atan2((Arm_Lengths.A2 * sin(Q2)) / (Arm_Lengths.A1 + Arm_Lengths.A2 * cos(Q2)));
     Q1 = Q1 * (180 / PI);
     Q2 = Q2 * (180 / PI);
 
